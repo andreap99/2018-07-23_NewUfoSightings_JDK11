@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 	
 	private Model model;
+	private Integer anno;
 
     @FXML
     private ResourceBundle resources;
@@ -33,7 +34,7 @@ public class FXMLController {
     private Button btnSelezionaAnno;
 
     @FXML
-    private ComboBox<?> cmbBoxForma;
+    private ComboBox<String> cmbBoxForma;
 
     @FXML
     private Button btnCreaGrafo;
@@ -50,15 +51,49 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
 
+    	String forma = this.cmbBoxForma.getValue();
+    	this.txtResult.appendText(this.model.creaGrafo(anno, forma));
+    	
     }
 
     @FXML
     void doSelezionaAnno(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	try {
+    		this.anno = Integer.parseInt(this.txtAnno.getText());
+    	} catch(NumberFormatException e) {
+    		this.txtResult.appendText("Inserire un anno compreso tra 1910 e 2014!\n");
+    		return;
+    	}
+    	if(anno<1910 || anno > 2014) {
+    		this.txtResult.appendText("Inserire un anno compreso tra 1910 e 2014!\n");
+    		return;
+    	}
+    	this.cmbBoxForma.getItems().addAll(this.model.getForme(anno));
+    	
     }
 
     @FXML
     void doSimula(ActionEvent event) {
+    	
+    	Integer t1;
+    	Integer alfa;
+    	try {
+    		t1 = Integer.parseInt(this.txtT1.getText());
+    		alfa = Integer.parseInt(this.txtAlfa.getText());
+    	}catch(NumberFormatException e) {
+    		this.txtResult.appendText("Inserire un numero!\n");
+    		return;
+    	}
+    	if(t1<0 || t1>365) {
+    		this.txtResult.appendText("Inserire un numero positivo minore o uguale a 365 in T1\n");
+    		return;
+    	}
+    	if(alfa<0 || alfa>100) {
+    		this.txtResult.appendText("Inserire un numero positivo minore o uguale a 100 in alfa\n");
+    		return;
+    	}
+    	this.txtResult.appendText(this.model.simula(anno, this.cmbBoxForma.getValue(), t1, alfa));
 
     }
 

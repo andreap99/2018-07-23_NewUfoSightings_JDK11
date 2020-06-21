@@ -1,5 +1,9 @@
 package it.polito.tdp.newufosightings.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 public class State {
 	private String id;
 	private String name;
@@ -9,6 +13,9 @@ public class State {
 	private int area;
 	private int population;
 	private String neighbors;
+	private List<String> vicini;
+	private double defcon;
+	private LocalDateTime ultima;
 
 	public State(String id, String name, String capital, Double lat, Double lng, int area, int population,
 			String neighbors) {
@@ -21,6 +28,27 @@ public class State {
 		this.area = area;
 		this.population = population;
 		this.neighbors = neighbors;
+		this.vicini = new ArrayList<>();
+		this.setVicini(neighbors);
+		this.defcon = 5.0;
+		this.ultima = null;
+	}
+
+	public void setUltima(LocalDateTime ultima) {
+		this.ultima = ultima;
+	}
+
+	private void setVicini(String n) {
+		if(n==null)
+			return;
+		String[] array = n.split(" ");
+		for(String s : array) {
+			this.vicini.add(s);
+		}
+	}
+
+	public List<String> getVicini() {
+		return vicini;
 	}
 
 	public String getId() {
@@ -115,6 +143,18 @@ public class State {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public double getDefcon() {
+		return defcon;
+	}
+
+	public void setDefcon(double defcon) {
+		this.defcon += defcon;
+	}
+
+	public LocalDateTime getUltima() {
+		return ultima;
 	}
 
 }
